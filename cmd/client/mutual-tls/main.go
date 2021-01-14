@@ -20,6 +20,9 @@ import (
 const (
 	defaultAddress = "localhost:4300"
 	defaultName    = "world"
+	caCert         = "cert/ca-cert.pem"
+	clientCert     = "cert/client-cert.pem"
+	clientKey      = "cert/client-key.pem"
 )
 
 func unaryInterceptor(
@@ -45,14 +48,14 @@ func streamInterceptor(
 func loadTLSCredentials() (credentials.TransportCredentials, error) {
 
 	// Load client's certificate and private key
-	clientCert, err := tls.LoadX509KeyPair("cert/client-cert.pem", "cert/client-key.pem")
+	clientCert, err := tls.LoadX509KeyPair(clientCert, clientKey)
 	if err != nil {
 		return nil, err
 	}
 
 	// Load certificate of the CA who signed server's certificate
 	certPool := x509.NewCertPool()
-	pemServerCA, err := ioutil.ReadFile("cert/ca-cert.pem")
+	pemServerCA, err := ioutil.ReadFile(caCert)
 	if err != nil {
 		return nil, err
 	}

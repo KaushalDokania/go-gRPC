@@ -16,7 +16,10 @@ import (
 )
 
 const (
-	port = ":4300"
+	port       = ":4300"
+	caCert     = "cert/ca-cert.pem"
+	serverCert = "cert/server-cert.pem"
+	serverKey  = "cert/server-key.pem"
 )
 
 // server is used to implement helloworld.GreeterServer.
@@ -33,14 +36,14 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 func loadTLSCredentials() (credentials.TransportCredentials, error) {
 
 	// Load server's certificate and private key
-	serverCert, err := tls.LoadX509KeyPair("cert/server-cert.pem", "cert/server-key.pem")
+	serverCert, err := tls.LoadX509KeyPair(serverCert, serverKey)
 	if err != nil {
 		return nil, err
 	}
 
 	// Load certificate of the CA who signed client's certificate
 	certPool := x509.NewCertPool()
-	pemClientCA, err := ioutil.ReadFile("cert/ca-cert.pem")
+	pemClientCA, err := ioutil.ReadFile(caCert)
 	if err != nil {
 		return nil, err
 	}

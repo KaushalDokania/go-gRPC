@@ -20,11 +20,14 @@ import (
 const (
 	address     = "localhost:4300"
 	defaultName = "world"
+	caCert      = "cert/ca-cert.pem"
+	clientCert  = "cert/client-cert.pem"
+	clientKey   = "cert/client-key.pem"
 )
 
 func loadTLSCredentials() (credentials.TransportCredentials, error) {
 	// Load certificate of the CA who signed server's certificate
-	pemServerCA, err := ioutil.ReadFile("cert/ca-cert.pem")
+	pemServerCA, err := ioutil.ReadFile(caCert)
 	if err != nil {
 		return nil, err
 	}
